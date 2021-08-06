@@ -1,4 +1,4 @@
---cpu=Cortex-M4.fp
+--cpu=Cortex-M4.fp.sp
 "f3switchaccesslevel\startup_stm32f303xc.o"
 "f3switchaccesslevel\main.o"
 "f3switchaccesslevel\stm32f3xx_it.o"

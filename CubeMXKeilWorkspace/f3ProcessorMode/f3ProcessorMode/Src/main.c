@@ -55,9 +55,18 @@ void generate_interrupt()
 	NVIC_EnableIRQ(WWDG_IRQn);
 	NVIC_SetPendingIRQ(WWDG_IRQn);
 }
+
+void hello(void)
+{
+	for(int j=0;j<100;j++);
+}
+
 int main(void)
 {
+	
 	generate_interrupt();
+	//void (*function_p) (void) = &hello;
+	//function_p();
   while (1)
   {
 		
