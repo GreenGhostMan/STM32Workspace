@@ -1,0 +1,69 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             factorial, CODE, READONLY
+    2 00000000                 ENTRY
+    3 00000000                 EXPORT           __main
+    4 00000000         __main
+    5 00000000 F04F 0605       mov              r6, #5
+    6 00000004 F04F 0701       mov              r7, #1
+    7 00000008         
+    8 00000008         loop
+    9 00000008 2E00            cmp              r6, #0
+   10 0000000A BFC2            ITTT             GT
+   11 0000000C 4377            MULGT            r7, r6, r7
+   12 0000000E 1E76            SUBGT            r6, r6, #1
+   13 00000010 E7FA            BGT              loop
+   14 00000012         
+   15 00000012         Stop
+   16 00000012 E7FE            B                Stop
+   17 00000014                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
+ork --depend=.\objects\main.d -o.\objects\main.o -I.\RTE\Device\STM32F103RC -I.
+\RTE\_Target_1 -IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\Core\Include -IC:\Ke
+il_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include --predefine="__EVAL SETA
+ 1" --predefine="__UVISION_VERSION SETA 526" --predefine="_RTE_ SETA 1" --prede
+fine="STM32F10X_HD SETA 1" --list=.\listings\main.lst main.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+Stop 00000012
+
+Symbol: Stop
+   Definitions
+      At line 15 in file main.s
+   Uses
+      At line 16 in file main.s
+Comment: Stop used once
+__main 00000000
+
+Symbol: __main
+   Definitions
+      At line 4 in file main.s
+   Uses
+      At line 3 in file main.s
+Comment: __main used once
+factorial 00000000
+
+Symbol: factorial
+   Definitions
+      At line 1 in file main.s
+   Uses
+      None
+Comment: factorial unused
+loop 00000008
+
+Symbol: loop
+   Definitions
+      At line 8 in file main.s
+   Uses
+      At line 13 in file main.s
+Comment: loop used once
+4 symbols
+338 symbols in table
