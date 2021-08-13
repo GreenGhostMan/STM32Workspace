@@ -15,7 +15,7 @@ int main(void)
 	
 	TIM3->CCMR1 |= 6<<4; // MODE1 (110)
 	TIM3->CCER |= 1;     // CC1E Enable ( pwm ch1, tim3 ch1 )
-	TIM3->CCR1 = TIM3->ARR/2;
+	TIM3->CCR1 = TIM3->ARR/2;   // duty cycle
 	
 	TIM3->CR1 |= 1; // timer counter enable
 	while(1)
