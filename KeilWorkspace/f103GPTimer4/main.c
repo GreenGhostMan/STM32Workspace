@@ -2,23 +2,25 @@
 
 int main(void)
 {
-	RCC->APB1ENR |=1<<2; // timer 4 clock enable
-	TIM4->PSC = 71;
-	TIM4->ARR = 100; // 100us
-	TIM4->CNT=0;     // count flag 0
-	TIM4->CR1 |= 1; // CEN enable
-	TIM4->DIER |=1; // update interrupt enable
-	NVIC_EnableIRQ(TIM4_IRQn);
+	RCC->APB1ENR |= RCC_APB1ENR_TIM6EN; // timer 4 clock enable
+	TIM6->PSC = 71;
+	TIM6->ARR = 50000; //  50 ms
+	TIM6->CNT=0;     // count flag 0
+	TIM6->CR1 |= 1; // CEN enable
+	TIM6->DIER |=1; // update interrupt enable
+	NVIC_EnableIRQ(TIM6_IRQn);
+	
+
 	while(1)
 	{
 		
 	}
 }
 
-void TIM4_IRQHandler(void)
+void TIM6_IRQHandler(void)
 {
-	if(TIM4->SR & TIM_SR_UIF)
+	if(TIM6->SR & TIM_SR_UIF)
 	{
-		TIM4->SR &= ~ TIM_SR_UIF;
+		TIM6->SR &= ~ TIM_SR_UIF;
 	}
 }
