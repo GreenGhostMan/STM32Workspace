@@ -1,0 +1,138 @@
+#include "stm32f10x.h"
+#include <stdio.h>
+#define ARRAYSIZE 4*4
+#define ADC1_DR ( (uint32_t) 0x4001244c )
+
+volatile uint16_t ADC_values[ARRAYSIZE];
+volatile uint32_t status = 0;
+
+void ADC_Init_(void);
+void DMA_Init_(void);
+
+int main(void)
+{
+	uint8_t index;
+	ADC_Init_();
+	DMA_Init_();
+	
+	// enable DMA1 CHANNEL TRANSFER
+	DMA_Cmd(DMA1_Channel1, ENABLE);
+	// start adc1 software conversion
+	ADC_SoftwareStartConvCmd(ADC1, ENABLE);
+	// wait for dma complete
+	while( !status ) {};
+	ADC_SoftwareStartConvCmd(ADC1,DISABLE);
+	
+	// print averages
+	
+	while(1)
+	{
+		
+	}
+}
+void DMA_Init_(void)
+{
+	// enable DMA clock
+	RCC_AHBPeriphClockCmd( RCC_AHBPeriph_DMA1, ENABLE);
+	// create DMA structure
+	DMA_InitTypeDef DMA_InitStructure;
+	// reset DMA1 channel to default values;
+	DMA_DeInit(DMA1_Channel1);
+	// channel will be used for memory to memory transfer
+	DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;
+	// setting normal mode ( non circular )
+	DMA_InitStructure.DMA_Mode = DMA_Mode_Normal;
+	// medium priority
+	DMA_InitStructure.DMA_Priority = DMA_Priority_High;
+	// source and destination data size word=32bit
+	DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
+	DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
+	// automatic memory destination increment enable
+	DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
+	// source address increment disable
+	DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+	// location assigned to peripheral register will be source
+	DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralSRC;
+	// chunk of data to be transfered
+	DMA_InitStructure.DMA_BufferSize = ARRAYSIZE;
+	// source and destination start addresses
+	DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)ADC1_DR;
+	DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t)ADC_values;
+	// send values to DMA register
+	DMA_Init(DMA1_Channel1, &DMA_InitStructure);
+	// enable dma1 channel transfer complete interrupt
+	DMA_ITConfig(DMA1_Channel1, DMA_IT_TC, ENABLE);
+	DMA_Cmd(DMA1_Channel1, ENABLE); // enable the dma1 channel1
+	
+	NVIC_InitTypeDef ni;
+	// enable dma1 channel IRQ Channel
+	ni.NVIC_IRQChannel = DMA1_Channel1_IRQn;
+	ni.NVIC_IRQChannelPreemptionPriority = 0;
+	ni.NVIC_IRQChannelSubPriority = 0;
+	ni.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_Init(&ni);
+	
+}
+void ADC_Init_(void)
+{
+	// enable adc1 and gpioa
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1 | RCC_APB2Periph_GPIOA, ENABLE);
+	GPIO_InitTypeDef GPIO_Initstructure; // variable used to set up the gpio pins
+	// configure adc pins ( pa0 --> channel 0 to pa7 channel 7 ) as analog inputs==
+	GPIO_StructInit(&GPIO_Initstructure); // Reset Init Structure, if not can cause issues...
+	GPIO_Initstructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4;
+	GPIO_Initstructure.GPIO_Mode = GPIO_Mode_AIN;
+	GPIO_Init(GPIOA, &GPIO_Initstructure);
+	
+	// ADC Configuration
+	ADC_InitTypeDef ADC_InitStructure;
+	
+	ADC_InitStructure.ADC_Mode = ADC_Mode_Independent;
+	// we will convert multiple channels
+	ADC_InitStructure.ADC_ScanConvMode = ENABLE;
+	// select continuous conversion mode
+	ADC_InitStructure.ADC_ContinuousConvMode = ENABLE;
+	// select no external triggering
+	ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_None;
+	// right 12 bits data alignment in adc data register
+	ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;
+	// 4 channels conversion
+	ADC_InitStructure.ADC_NbrOfChannel = 4;
+	// load structure values to control and status register
+	ADC_Init(ADC1, &ADC_InitStructure);
+	
+	// configure each channel
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_0, 1, ADC_SampleTime_41Cycles5);
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_1, 2, ADC_SampleTime_41Cycles5);
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_2, 3, ADC_SampleTime_41Cycles5);
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_3, 4, ADC_SampleTime_41Cycles5);
+	
+	// enable adc1
+	ADC_Cmd(ADC1, ENABLE);
+	// enable dma for adc
+	ADC_DMACmd(ADC1, ENABLE);
+	// enable ADC1 reset calibration register
+	ADC_ResetCalibration(ADC1);
+	// check the end of adc1 reset calibration register
+	while(ADC_GetResetCalibrationStatus(ADC1));
+	// start adc1 calibration
+	ADC_StartCalibration(ADC1);
+	// check the end of adc1 reset calibration
+	while(ADC_GetCalibrationStatus(ADC1));
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

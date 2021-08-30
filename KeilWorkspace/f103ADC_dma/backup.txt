@@ -1,0 +1,52 @@
+#include "stm32f10x.h"
+
+uint16_t adc_reault1=0; 
+void myADC_Init(void);
+
+int main(void)
+{
+	myADC_Init();
+	
+	while(1)
+	{
+		ADC1->CR2 |= 1<<22; // software start
+		if(ADC1->SR & ADC_SR_EOC)
+		{
+			ADC1->SR &= ~ADC_SR_EOC;
+			adc_reault1 = ADC1->DR;
+			//ADC1->CR2 |= 1<<2;
+		}
+		
+	}
+}
+
+void myADC_Init(void)
+{
+	RCC->APB2ENR|=  RCC_APB2ENR_IOPCEN | RCC_APB2ENR_IOPAEN;
+	GPIOC->CRL = 0xFFFF000F;
+	GPIOA->CRL = 0xFFF0FFFF;
+
+	RCC->CFGR   |= 2<<14; // ADCPRE clock division 6 , 72/6 = 12MHz
+	RCC->APB2ENR|= RCC_APB2ENR_ADC1EN;
+	
+	
+	// ADC control register
+	ADC1->CR2   |= 1<<20 | // EXTTRIG, external trigger enable
+							   7<<17;  // EXTSEL, exti select software trigger
+	//ADC1->SMPR1 |= 0<<3 | 0<<6 | 0<<9; // CHANNEL 11,12,13 1.5 cycle
+	ADC1->SMPR2 |= 0<<12;  // CHANNEL 4 1.5 cycle
+	//ADC1->SMPR1 |= 0<<6;  
+	
+	ADC1->CR2   |= 1; // ADC ON
+}
+[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[
+
+
+
+
+
+
+
+
+
+
