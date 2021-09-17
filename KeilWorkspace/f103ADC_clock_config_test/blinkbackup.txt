@@ -1,0 +1,21 @@
+
+GPIO_InitTypeDef GPIO_InitStructure;
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);	
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD, ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
+	
+	AFIO->MAPR |= AFIO_MAPR_SWJ_CFG_JTAGDISABLE;       								// JTAG-DP Disabled, SW-DP Enabled
+	AFIO->MAPR |= 10<<24;
+	//AFIO->MAPR |= AFIO_MAPR_TIM2_REMAP_0;             							// THIS ARE TIM2 REMAP TO PA15, PB3
+	
+	
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;			
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;									// 50M 
+
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_5;  					// MOTOR B -> INB1(PB4), INB2(PB5)
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
+	
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_5 ;						// MOTOR C -> INC1(PC4), INC2(PC5)
+	GPIO_Init(GPIOC, &GPIO_InitStructure);
