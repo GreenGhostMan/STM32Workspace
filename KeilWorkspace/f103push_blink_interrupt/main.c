@@ -8,7 +8,7 @@ int main(void)
 	GPIOC->ODR |= 1<<2 | 1<<3; // PC2, PC3 PULL UP
 	
 	RCC->APB2ENR |= RCC_APB2ENR_AFIOEN;
-	AFIO->EXTICR[0] |= ( 0x2<<8 ) | (0x2<<12);
+	AFIO->EXTICR[0] |= ( 0x2<<8 ) | (0x2<<12); // EXTI2->PORTC , EXTI3-> PORTC
 	
 	EXTI->IMR |= (1<<2) | (1<<3);
 	EXTI->FTSR |= (1<<2) | (1<<3);
