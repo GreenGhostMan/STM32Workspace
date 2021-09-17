@@ -1,0 +1,17 @@
+00:51:05 **** Incremental Build of configuration Debug for project f3discovery_driver ****
+make -j6 all 
+arm-none-eabi-gcc "../drivers/Src/stm32f3_gpio_driver.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DSTM32F303VCTx -DSTM32 -DSTM32F3 -DSTM32F3DISCOVERY -c -I../Inc -I"/home/robot/Desktop/STM32-driver-development/f3discovery_driver/drivers/Inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"drivers/Src/stm32f3_gpio_driver.d" -MT"drivers/Src/stm32f3_gpio_driver.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=soft -mthumb -o "drivers/Src/stm32f3_gpio_driver.o"
+arm-none-eabi-gcc "../Src/02led_btn.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DSTM32F303VCTx -DSTM32 -DSTM32F3 -DSTM32F3DISCOVERY -c -I../Inc -I"/home/robot/Desktop/STM32-driver-development/f3discovery_driver/drivers/Inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Src/02led_btn.d" -MT"Src/02led_btn.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=soft -mthumb -o "Src/02led_btn.o"
+../drivers/Src/stm32f3_gpio_driver.c: In function 'GPIO_IRQConfig':
+../drivers/Src/stm32f3_gpio_driver.c:204:16: error: expected expression before '|=' token
+  204 |    *NVIC_ISER0 |= ( 1 << IRQNumber );
+      |                ^~
+../drivers/Src/stm32f3_gpio_driver.c:208:16: error: expected expression before '|=' token
+  208 |    *NVIC_ISER1 |= ( 1 << (IRQNumbe%32) );
+      |                ^~
+../drivers/Src/stm32f3_gpio_driver.c:212:16: error: expected expression before '|=' token
+  212 |    *NVIC_ISER2 |= ( 1 << (IRQNumbe%32) );
+      |                ^~
+make: *** [drivers/Src/subdir.mk:19: drivers/Src/stm32f3_gpio_driver.o] Error 1
+make: *** Waiting for unfinished jobs....
+"make -j6 all" terminated with exit code 2. Build might be incomplete.
