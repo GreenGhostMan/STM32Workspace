@@ -1,0 +1,25 @@
+--cpu Cortex-M3
+"swo_serial_viewer\startup_stm32f103xe.o"
+"swo_serial_viewer\main.o"
+"swo_serial_viewer\stm32f1xx_it.o"
+"swo_serial_viewer\stm32f1xx_hal_msp.o"
+"swo_serial_viewer\stm32f1xx_hal_gpio_ex.o"
+"swo_serial_viewer\stm32f1xx_hal_i2c.o"
+"swo_serial_viewer\stm32f1xx_hal.o"
+"swo_serial_viewer\stm32f1xx_hal_rcc.o"
+"swo_serial_viewer\stm32f1xx_hal_rcc_ex.o"
+"swo_serial_viewer\stm32f1xx_hal_gpio.o"
+"swo_serial_viewer\stm32f1xx_hal_dma.o"
+"swo_serial_viewer\stm32f1xx_hal_cortex.o"
+"swo_serial_viewer\stm32f1xx_hal_pwr.o"
+"swo_serial_viewer\stm32f1xx_hal_flash.o"
+"swo_serial_viewer\stm32f1xx_hal_flash_ex.o"
+"swo_serial_viewer\stm32f1xx_hal_exti.o"
+"swo_serial_viewer\stm32f1xx_hal_tim.o"
+"swo_serial_viewer\stm32f1xx_hal_tim_ex.o"
+"swo_serial_viewer\stm32f1xx_hal_uart.o"
+"swo_serial_viewer\system_stm32f1xx.o"
+--library_type=microlib --strict --scatter "swo_serial_viewer\swo_serial_viewer.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "swo_serial_viewer.map" -o swo_serial_viewer\swo_serial_viewer.axf
